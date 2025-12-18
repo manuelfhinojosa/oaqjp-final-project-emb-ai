@@ -1,8 +1,17 @@
 import requests  # Import the requests library
+import json #Import json library
 
 def emotion_detector(text_to_analyse):  # Define a function
     url = 'https://sn-watson-emotion.labs.skills.network/v1/watson.runtime.nlp.v1/NlpService/EmotionPredict'  # URL of the emotion detection function
     myobj = { "raw_document": { "text": text_to_analyse } }  # Create a dictionary
     header = {"grpc-metadata-mm-model-id": "emotion_aggregated-workflow_lang_en_stock"}  # Set the headers required for the request
     response = requests.post(url, json = myobj, headers=header)  # Send a POST request to the API
-    return response.text  # Return the response text
+    formatted_response = json.loads(response.text) #Formatting response
+    anger_score = formatted_response['emotionPredictions']['emotion']['anger']
+    disgust_score = formatted_response['emotionPredictions']['emotion']['disgust']
+    fear_score = formatted_response['emotionPredictions']['emotion']['fear']
+    joy_score = formatted_response['emotionPredictions']['emotion']['joy']
+    sadness_score = formatted_response['emotionPredictions']['emotion']['sadness']
+    emotions = {'anger': anger_score, 'disgust': disgust_score, 'fear': fear_score, 'joy': joy_score, 'sadness': sadness_score}
+    dominant_emotion = max(emotions, key = emotions.get)
+    return {'anger': anger_score, 'disgust': disgust_score, 'fear': fear_score, 'joy': joy_score, 'sadness': sadness_score, 'dominant_emotion': dominant_emotion} # Return the response
