@@ -19,9 +19,11 @@ def sent_detector():
     sadness_score = response['sadness']
     dominant_emotion = response.get('dominant_emotion')
 
-    
+    if dominant_emotion is None:
+        return "Invalid text! Please try again!."
+    else:
     # Return a formatted string
-    return "For the given statement, the system response is 'anger': {}, 'disgust': {}, 'fear': {}, 'joy': {} and 'sadness': {}. The dominant emotion is {}.".format(anger_score, disgust_score, fear_score, joy_score, sadness_score, dominant_emotion)
+        return "For the given statement, the system response is 'anger': {}, 'disgust': {}, 'fear': {}, 'joy': {} and 'sadness': {}. The dominant emotion is {}.".format(anger_score, disgust_score, fear_score, joy_score, sadness_score, dominant_emotion)
         
 
 @app.route("/")
@@ -29,4 +31,4 @@ def render_index_page():
     return render_template('index.html')
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    app.run(host="0.0.0.0", port=5002)
